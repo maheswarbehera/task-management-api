@@ -31,11 +31,12 @@ const urlMapping = `/${process.env.BASE_URL}/${process.env.API_VERSION}`;
 
 const appRoutes = [
     { path: "/users", route: sharedRoutes.userRoutes },
+    { path: "/tasks", route: sharedRoutes.taskRoutes },
 ]
 
 appRoutes.forEach(({ path, route }) => {
     app.use(`${urlMapping}${path}`, route);
-    // console.log(`${urlMapping}${path}`)
+    console.log(`${urlMapping}${path}`)
 }); 
 
 app.get("/favicon.ico", (req, res) => {

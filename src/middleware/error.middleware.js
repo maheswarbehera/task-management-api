@@ -26,6 +26,38 @@ const globalErrorHandler = (err, req, res, next) => {
         });
     }
 
+    if (err.code === 11000) {
+        statusCode = 409;
+        const duplicateFields = err.keyValue ? Object.entries(err.keyValue).map(([key, value]) => `${key}: ${value}`) : []; 
+        return res.status(statusCode).json({
+          status,
+          statusCode,
+          message: `Duplicate entry: ${duplicateFields.join(", ")} already exists.`,       
+          ...(process.env.NODE_ENV === 'development' && {name, stack }),
+        });
+      }
+    
+      // Mongoose validation error
+      if (err.name === "ValidationError") {
+        statusCode = 400;
+        return res.status(statusCode).json({
+          status,
+          statusCode,
+          message: Object.values(err.errors).map((val) => val.message),
+          ...(process.env.NODE_ENV === 'development' && {name, stack }),
+        });
+      }
+      
+      // Handle invalid MongoDB ObjectId errors
+      if (err.name === "CastError") {
+        statusCode = 400
+        return res.status(statusCode).json({
+          status,
+          statusCode,
+          message: `Invalid ${err.path}: ${err.value}`, 
+          ...(process.env.NODE_ENV === "development" && { name, stack }),
+        });
+      } 
 
     if (err.name === "TokenExpiredError") {
         statusCode = 401;
