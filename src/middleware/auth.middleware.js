@@ -1,4 +1,4 @@
-import jwt from "jsonWebToken";
+import jwt from "jsonwebtoken";
 import { asyncHandler, ApiErrorResponse } from "node-js-api-response";
 import sharedModel from "../model/index.js";
 

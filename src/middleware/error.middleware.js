@@ -1,5 +1,7 @@
 import os from 'os';
 import { ApiError } from 'node-js-api-response';
+import sharedMiddlewares from './index.js';
+
 
 const globalErrorHandler = (err, req, res, next) => {
     let statusCode = err.statusCode || 500; 
@@ -7,11 +9,12 @@ const globalErrorHandler = (err, req, res, next) => {
     const status = err.status || false; 
     const stack = err.stack || undefined; 
     const name = err.name || 'Error';
-
+    
+    const {errorLogger} = sharedMiddlewares;
     if (process.env.NODE_ENV === 'development') {
-        console.error(`[${os.hostname}] [${statusCode}] | ${req.method} | ${req.originalUrl} - ${name} | ${message} | ${stack}`); 
+        errorLogger.error(`[${os.hostname}] [${statusCode}] | ${req.method} | ${req.originalUrl} - ${name} | ${message} | ${stack}`); 
     }else {
-        console.error(`[${os.hostname}] [${statusCode}] | ${req.method} | ${req.originalUrl} - ${name} | ${message}`); 
+        errorLogger.error(`[${os.hostname}] [${statusCode}] | ${req.method} | ${req.originalUrl} - ${name} | ${message}`); 
     }
 
     if (err instanceof ApiError) {

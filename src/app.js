@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import sharedRoutes from './route/index.js';
 import dotenv from 'dotenv';
 import sharedMiddlewares from './middleware/index.js';
+import userAgent from "express-useragent"
 
 dotenv.config({path: `./.env`});
 
@@ -15,7 +16,10 @@ const __dirname = path.dirname(__filename);
 const app = express()
 
 app.use(express.json());
-app.use(express.static("public")); 
+app.use(express.static("public"));
+app.use(userAgent.express());
+app.use(sharedMiddlewares.logRequestResponse);
+
 app.use(cors({ 
     origin: process.env.CORS_ORIGIN, 
     credentials: true, 
