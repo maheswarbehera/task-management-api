@@ -8,7 +8,7 @@ dotenv.config({path: `./.env`});
 connectDb()
 .then(() => {
     const server = app.listen( process.env.PORT, process.env.HOST, () => {
-        console.log(`[${os.hostname}] Server is running on http://${process.env.HOST}:${process.env.PORT}${process.env.BASE_URL}${process.env.API_VERSION}`);
+        console.log(`[${os.hostname}] Server is running on http://${process.env.HOST}:${process.env.PORT}/${process.env.BASE_URL}/${process.env.API_VERSION}`);
     })
 
     const gracefulShutdown = (signal) => {
