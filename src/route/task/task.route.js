@@ -37,6 +37,25 @@ const routes = [
         handler: taskController.deleteTask,
         middlewares: [verifyJwtToken]
     }, 
+    {
+        method: "get",
+        path: "/dashboard",
+        handler: taskController.taskCreatedByUser,
+        middlewares: [verifyJwtToken]
+    }, 
+    {
+        method: "get",
+        path: "/dashboard/assign",
+        handler: taskController.taskAssigneeToUser,
+        middlewares: [verifyJwtToken]
+    }, 
+    {
+        method: "get",
+        path: "/dashboard/dueTask",
+        handler: taskController.overDueTask,
+        middlewares: [verifyJwtToken]
+    }, 
+
 
 ]
 

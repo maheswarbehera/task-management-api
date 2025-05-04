@@ -41,10 +41,15 @@ const loginUser = asyncHandler(async(req, res, next) => {
     return ApiSuccessResponse(res, 200,{user: loggedInUser, accessToken}, "User Login Successfull");
 })
 
-
+const getAllUser = asyncHandler(async(req, res, next) => {
+    const users = await User.find()
+    if(users.length === 0) return ApiErrorResponse(404, "No user Found", next)
+    return ApiSuccessResponse(res, 200, {users}, "user fetched successfull!")
+})
 
 
 export const userController = {
     registerUser,
-    loginUser
+    loginUser,
+    getAllUser
 }

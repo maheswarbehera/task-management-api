@@ -19,6 +19,12 @@ const routes = [
         path: "/login",
         handler: userController.loginUser,
         middlewares: []
+    },
+    {
+        method: "get",
+        path: "/",
+        handler: userController.getAllUser,
+        middlewares: [verifyJwtToken]
     }
 ]
 

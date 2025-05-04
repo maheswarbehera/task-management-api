@@ -25,7 +25,9 @@ const taskSchema = new Schema({
         type: String,
         enum: ['Pending', 'In Progress', 'Completed'],
         default: 'Pending'
-    }
-})
+    },
+    creator: { type: Schema.Types.ObjectId, ref: 'User' },
+    assigneeTo: { type: Schema.Types.ObjectId, ref: 'User' },
+}, { timestamps: true })
 
 export const Task = mongoose.model("Task", taskSchema);
