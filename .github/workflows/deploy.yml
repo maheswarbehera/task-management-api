@@ -19,7 +19,11 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
+      - name: Print Host Info (Debug)
+        run: |
+          echo "User: ${{ secrets.SSH_USER }}"
+          echo "Host: ${{ secrets.SSH_HOST }}"
+          
       - name: Deploy to EC2
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
