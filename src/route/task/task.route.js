@@ -55,6 +55,18 @@ const routes = [
         handler: taskController.overDueTask,
         middlewares: [verifyJwtToken]
     }, 
+    {
+        method: "get",
+        path: "/filter",
+        handler: taskController.filterTask,
+        middlewares: [verifyJwtToken]
+    }, 
+    {
+        method: "get",
+        path: "/search",
+        handler: taskController.searchTask,
+        middlewares: [verifyJwtToken]
+    }, 
 
 
 ]

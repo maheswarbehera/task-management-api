@@ -142,6 +142,58 @@ const overDueTask = asyncHandler(async(req, res, next) => {
     return ApiSuccessResponse(res, 200, {tasks}, "success")
 })
 
+const parseDate = (dateString) => {
+    const [day, month, year] = dateString.split("-");
+    return new Date(year, month - 1, day);
+};
+const capitalize = (str) => {
+    if (typeof str !== 'string') return str;
+    return str
+    .split(" ") 
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" "); 
+};
+  
+const filterTask = asyncHandler(async(req, res, next) =>{
+    
+    const { status, priority, dueDate } = req.query;
+
+    const query = {};
+
+    if (status) query.status = capitalize(status);
+    if (priority) query.priority = capitalize(priority); 
+
+    if (dueDate) {
+        const parsedDate = parseDate(dueDate);
+        query.dueDate = { $gte: parsedDate };  
+    }
+
+    const tasks = await Task.find(query).populate([
+        { path: "creator", select: "username" },
+        { path: "assigneeTo", select: "username" }
+      ]);;
+
+    return ApiSuccessResponse(res, 200, {tasks}, "filter task fetched" ) 
+})
+
+const searchTask = asyncHandler(async( req, res, next) => {
+    const { query } = req.query;
+
+    if (!query) {
+      return ApiErrorResponse(400, "Query parameter is required", next);
+    }
+
+    const tasks = await Task.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+      ],
+    }).populate([
+        { path: "creator", select: "username" },
+        { path: "assigneeTo", select: "username" }
+      ]);
+    return ApiSuccessResponse(res, 200, tasks, "Search task fetched" ) 
+})
 export const taskController = {
     createTask,
     getById,
@@ -150,5 +202,7 @@ export const taskController = {
     deleteTask,
     taskCreatedByUser,
     taskAssigneeToUser,
-    overDueTask
+    overDueTask,
+    filterTask,
+    searchTask
 }
