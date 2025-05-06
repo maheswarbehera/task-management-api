@@ -41,7 +41,7 @@ const getAll = asyncHandler(async(req, res, next) => {
     const tasks = await Task.find().populate([
         { path: "creator", select: "username" },
         { path: "assigneeTo", select: "username" }
-      ]);
+      ]).sort({dueDate: 1});
     if(tasks.length === 0) return ApiErrorResponse(404, "No task found", next);
     return ApiSuccessResponse(res, 200, {tasks}, "All task fetched successfully"); 
 })
@@ -142,10 +142,7 @@ const overDueTask = asyncHandler(async(req, res, next) => {
     return ApiSuccessResponse(res, 200, {tasks}, "success")
 })
 
-const parseDate = (dateString) => {
-    const [day, month, year] = dateString.split("-");
-    return new Date(year, month - 1, day);
-};
+
 const capitalize = (str) => {
     if (typeof str !== 'string') return str;
     return str
@@ -164,14 +161,13 @@ const filterTask = asyncHandler(async(req, res, next) =>{
     if (priority) query.priority = capitalize(priority); 
 
     if (dueDate) {
-        const parsedDate = parseDate(dueDate);
-        query.dueDate = { $gte: parsedDate };  
+        query.dueDate = { $lte: dueDate };  
     }
 
     const tasks = await Task.find(query).populate([
         { path: "creator", select: "username" },
         { path: "assigneeTo", select: "username" }
-      ]);;
+      ]).sort({dueDate: 1});;
 
     return ApiSuccessResponse(res, 200, {tasks}, "filter task fetched" ) 
 })
