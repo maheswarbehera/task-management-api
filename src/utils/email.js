@@ -32,14 +32,14 @@ const taskAssignee = async (email, username, task) => {
         <ul>
           <li><b>Title:</b> ${title}</li>
           <li><b>Description:</b> ${description}</li>
-          <li><b>Due Date:</b> ${dueDate}</li>
+          <li><b>Due Date:</b> ${new Date(dueDate).toLocaleDateString("en-GB")}</li>
           <li><b>Priority:</b> ${priority}</li>
           <li><b>Status:</b> ${status}</li>
           <li><b>Assigned By:</b> ${creator.username}</li>
         </ul>
 
         Please log in to your dashboard to manage the task:<br>
-        <a href="http://${process.env.HOST}/dashboard">http://${process.env.HOST}/dashboard</a><br><br>
+        <a href="https://maheswar.co.in/dashboard">https://maheswar.co.in/dashboard</a><br><br>
 
         If you have questions, contact support at <a href="mailto:support@example.com">support@example.com</a>.<br><br>
 
